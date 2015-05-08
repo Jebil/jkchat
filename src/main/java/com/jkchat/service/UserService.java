@@ -1,0 +1,22 @@
+package com.jkchat.service;
+
+import java.util.List;
+
+import com.jkchat.models.ChatMessage;
+import com.jkchat.models.User;
+
+public interface UserService {
+	public User getUserDetails(String userName);
+
+	public boolean addUser(User user);
+
+	public List<String> getAllUserNames();
+
+	public List<String> getAllOtherNames(String name);
+
+	public List<String> getOnlineNames(String name);
+
+	public boolean putMessage(String to, ChatMessage cm);
+
+	public List<ChatMessage> getMessages(String to,String from);
+}
