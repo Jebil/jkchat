@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@page session="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -21,9 +21,6 @@
 		myOffset = 0;
 		onlineCheck();
 		initialize('${me}');
-		// to create
-		//$(handler).chatbox("option", "boxManager").addMsg("Mr. Foo", "Barrr!");
-
 	});
 </script>
 <script type="text/javascript">
@@ -64,7 +61,7 @@
 						$('#' + name).chatbox("option", "boxManager").addMsg(
 								"You", entry[2]);
 					} else {
-						
+
 						$('#' + entry[1].trim())
 								.chatbox("option", "boxManager").addMsg(
 										entry[1], entry[2]);
@@ -101,7 +98,6 @@
 									"boxManager").addMsg(entry.from,
 									entry.message);
 						}
-
 					});
 				}
 
@@ -133,7 +129,8 @@
 	</form:form>
 	<h1>Chat</h1>
 	<c:forEach items="${userList}" var="name">
-		<label id="label-${fn:toLowerCase(name) }" onclick="javascript:addChatBox('${fn:toLowerCase(name)}')">${name}</label>
+		<label id="label-${fn:toLowerCase(name) }"
+			onclick="javascript:addChatBox('${fn:toLowerCase(name)}')">${name}</label>
 		<br />
 	</c:forEach>
 	<div id="root"></div>

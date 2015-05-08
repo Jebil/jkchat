@@ -73,10 +73,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean putMessage(String to, ChatMessage cm) {
-		UserMessages um = new UserMessages();
-		um.setCm(cm);
-		um.setuName(to);
-		userDao.saveMessages(um);
 		List<ChatMessage> list = map.get(to);
 		if (list == null) {
 			list = new ArrayList<ChatMessage>();
@@ -92,12 +88,20 @@ public class UserServiceImpl implements UserService {
 	public List<ChatMessage> getMessages(String to, String from) {
 		List<ChatMessage> list = map.get(to);
 		map.remove(to);
+		UserMessages um = new UserMessages();
+		if (list!=null) {
+			for (ChatMessage cm : list) {
+				um.setCm(cm);
+				um.setuName(to);
+				userDao.saveMessages(um);
+			}
+		}
 		return list;
 	}
 
 	@Override
 	public List<ChatMessage> getMessagesFromDB(String me, String from) {
-		return userDao.getMessages(me,from.toLowerCase());
+		return userDao.getMessages(me, from.toLowerCase());
 	}
 
 	@Override
