@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jkchat.dao.UserDao;
+import com.jkchat.models.ChatMessage;
 import com.jkchat.models.User;
+import com.jkchat.models.UserMessages;
 
 @Repository
 @Transactional
@@ -56,6 +57,32 @@ public class UserDaoImpl implements UserDao {
 		cr.setProjection(Projections.property("name"));
 		cr.add(Restrictions.ne("name", name));
 		return cr.list();
+	}
+
+	@Override
+	public List<ChatMessage> getMessages(String me, String from) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria cr = session.createCriteria(UserMessages.class);
+		cr.createAlias("cm", "cm");
+		cr.setProjection(Projections.projectionList()
+				.add(Projections.property("cm.id"), "id")
+				.add(Projections.property("cm.fromUser"), "fromUser")
+				.add(Projections.property("cm.message"), "message"));
+		cr.add(Restrictions.or(Restrictions.eq("uName", me),
+				Restrictions.eq("uName", from)));
+		cr.add(Restrictions.or(Restrictions.eq("cm.fromUser", me),
+				Restrictions.eq("cm.fromUser", from)));
+		cr.setMaxResults(10);
+		return cr.list();
+	}
+
+	@Override
+	public boolean saveMessages(UserMessages um) {
+		logger.debug("inside saveMessages ");
+		Session session = sessionFactory.getCurrentSession();
+		session.save(um);
+		logger.debug("end saveMessages ");
+		return true;
 	}
 
 }

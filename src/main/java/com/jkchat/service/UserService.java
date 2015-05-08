@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jkchat.models.ChatMessage;
 import com.jkchat.models.User;
+import com.jkchat.models.UserMessages;
 
 public interface UserService {
 	public User getUserDetails(String userName);
@@ -18,5 +19,10 @@ public interface UserService {
 
 	public boolean putMessage(String to, ChatMessage cm);
 
-	public List<ChatMessage> getMessages(String to,String from);
+	public List<ChatMessage> getMessages(String to, String from);
+
+	public List<ChatMessage> getMessagesFromDB(String me, String From);
+
+	public boolean saveMessagesToDB(UserMessages um);
+
 }

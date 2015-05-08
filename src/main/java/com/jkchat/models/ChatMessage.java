@@ -1,11 +1,24 @@
 package com.jkchat.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "ChatMessage", schema = "test")
 public class ChatMessage {
-	private String from;
+	@Id
+	@GeneratedValue
+	private int id;
+	@Column
+	private String fromUser;
+	@Column
 	private String message;
 
 	public String getFrom() {
-		return from;
+		return fromUser;
 	}
 
 	public String getMessage() {
@@ -13,7 +26,7 @@ public class ChatMessage {
 	}
 
 	public void setFrom(String from) {
-		this.from = from;
+		this.fromUser = from;
 	}
 
 	public void setMessage(String message) {

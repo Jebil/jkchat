@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jkchat.dao.UserDao;
 import com.jkchat.models.ChatMessage;
 import com.jkchat.models.User;
+import com.jkchat.models.UserMessages;
 import com.jkchat.service.UserService;
 
 @Service
@@ -72,6 +73,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean putMessage(String to, ChatMessage cm) {
+		UserMessages um = new UserMessages();
+		um.setCm(cm);
+		um.setuName(to);
+		userDao.saveMessages(um);
 		List<ChatMessage> list = map.get(to);
 		if (list == null) {
 			list = new ArrayList<ChatMessage>();
@@ -88,5 +93,16 @@ public class UserServiceImpl implements UserService {
 		List<ChatMessage> list = map.get(to);
 		map.remove(to);
 		return list;
+	}
+
+	@Override
+	public List<ChatMessage> getMessagesFromDB(String me, String from) {
+		return userDao.getMessages(me,from.toLowerCase());
+	}
+
+	@Override
+	public boolean saveMessagesToDB(UserMessages um) {
+		userDao.saveMessages(um);
+		return true;
 	}
 }

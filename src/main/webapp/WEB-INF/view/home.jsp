@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@page session="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -46,10 +47,32 @@
 				}
 			});
 			myOffset += 350;
+			loadPrevMessages(name);
 		} else {
 			$("#" + name).chatbox("option", "hidden", false);
 			myOffset += 350;
 		}
+	}
+	function loadPrevMessages(name) {
+		$.post("loadPreviousMessages", {
+			"${_csrf.parameterName}" : "${_csrf.token}",
+			"from" : name,
+		}, function(data, status) {
+			if (data.length != 0) {
+				data.forEach(function(entry) {
+					if (entry[1].trim() == '${me}') {
+						$('#' + name).chatbox("option", "boxManager").addMsg(
+								"You", entry[2]);
+					} else {
+						
+						$('#' + entry[1].trim())
+								.chatbox("option", "boxManager").addMsg(
+										entry[1], entry[2]);
+					}
+				});
+			}
+
+		});
 	}
 	function sendMessage(from, message, to) {
 		$.post("sendMessage", {
@@ -83,7 +106,7 @@
 				}
 
 			});
-		}, 4000)
+		}, 2000)
 	}
 	function onlineCheck() {
 		setInterval(function() {
@@ -110,7 +133,7 @@
 	</form:form>
 	<h1>Chat</h1>
 	<c:forEach items="${userList}" var="name">
-		<label id="label-${name }" onclick="javascript:addChatBox('${name}')">${name}</label>
+		<label id="label-${fn:toLowerCase(name) }" onclick="javascript:addChatBox('${fn:toLowerCase(name)}')">${name}</label>
 		<br />
 	</c:forEach>
 	<div id="root"></div>

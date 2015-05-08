@@ -29,7 +29,7 @@ public class WebServicesController {
 			@RequestParam(value = "from") String from,
 			@RequestParam(value = "message") String msg) {
 		ChatMessage cm = new ChatMessage();
-		cm.setFrom(from);
+		cm.setFrom(from.trim());
 		cm.setMessage(msg);
 		userService.putMessage(to, cm);
 		return "success";
@@ -40,13 +40,15 @@ public class WebServicesController {
 		String myName = SecurityContextHolder.getContext().getAuthentication()
 				.getName();
 		List<ChatMessage> list = userService.getMessages(myName, myName);
-		if (list != null) {
-			for (ChatMessage chatMessage : list) {
-				System.out.println("Message:" + chatMessage.getFrom());
-			}
-			return list;
-		}
 		return list;
+	}
+
+	@RequestMapping(value = "loadPreviousMessages", produces = "application/json")
+	public List<ChatMessage> loadPreviousMessages(
+			@RequestParam(value = "from") String from) {
+		String myName = SecurityContextHolder.getContext().getAuthentication()
+				.getName();
+		return userService.getMessagesFromDB(myName, from.trim());
 
 	}
 }
