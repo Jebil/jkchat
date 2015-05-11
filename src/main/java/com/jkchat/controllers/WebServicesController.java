@@ -39,7 +39,8 @@ public class WebServicesController {
 	public List<ChatMessage> getMessages() {
 		String myName = SecurityContextHolder.getContext().getAuthentication()
 				.getName();
-		List<ChatMessage> list = userService.getMessages(myName.toLowerCase(), myName);
+		List<ChatMessage> list = userService.getMessages(myName.toLowerCase(),
+				myName);
 		return list;
 	}
 
@@ -48,7 +49,7 @@ public class WebServicesController {
 			@RequestParam(value = "from") String from) {
 		String myName = SecurityContextHolder.getContext().getAuthentication()
 				.getName();
-		return userService.getMessagesFromDB(myName.toLowerCase(), from.trim().toLowerCase());
-
+		return userService.getMessagesFromDB(myName.toLowerCase(), from.trim()
+				.toLowerCase());
 	}
 }
