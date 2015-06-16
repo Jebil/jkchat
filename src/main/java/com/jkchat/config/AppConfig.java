@@ -49,7 +49,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Bean(name = "dataSource")
 	public BasicDataSource dataSource() {
-
 		BasicDataSource ds = new BasicDataSource();
 		ds.setDriverClassName("com.mysql.jdbc.Driver");
 		ds.setUrl("jdbc:mysql://localhost:3306");
