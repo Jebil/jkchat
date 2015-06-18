@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,9 @@ import com.jkchat.service.UserService;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
 	UserService userService;
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+	
 	private static final Logger logger = Logger
 			.getLogger(CustomAuthenticationProvider.class);
 
@@ -37,6 +41,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
 		Authentication auth = new UsernamePasswordAuthenticationToken(name,
 				password, grantedAuths);
+		this.simpMessagingTemplate.convertAndSend("/queue/onlineUsers",
+				name);
 		logger.debug("end of authenticate function.");
 		return auth;
 	}

@@ -10,6 +10,9 @@
 <head>
 <link type="text/css" href="resources/css/jquery.ui.chatbox.css"
 	rel="stylesheet" />
+<script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript"
@@ -19,8 +22,9 @@
 <script>
 	$(document).ready(function() {
 		myOffset = 0;
-		onlineCheck();
+		connect();
 		initialize('${me}');
+		onlineCheck();
 	});
 </script>
 <script type="text/javascript">
@@ -71,41 +75,32 @@
 
 		});
 	}
-	function sendMessage(from, message, to) {
-		$.post("sendMessage", {
-			"${_csrf.parameterName}" : "${_csrf.token}",
-			"from" : from,
-			"to" : to,
-			"message" : message
+	function initialize(me) {
+		$.post("getMessages", {
+			"${_csrf.parameterName}" : "${_csrf.token}"
 		}, function(data, status) {
+			if (data.length != 0) {
+				data
+						.forEach(function(entry) {
+							if ($('#' + entry.from.trim()).length != 0) {
+								$("#" + name)
+										.chatbox("option", "hidden", false);
+								$('#' + entry.from.trim()).chatbox("option",
+										"boxManager").addMsg(entry.from,
+										entry.message);
+							} else {
+								addChatBox(entry.from.trim());
+								$('#' + entry.from.trim()).chatbox("option",
+										"boxManager").addMsg(entry.from,
+										entry.message);
+							}
+						});
+			}
+
 		});
 	}
-	function initialize(me) {
-		setInterval(function() {
-			$.post("getMessages", {
-				"${_csrf.parameterName}" : "${_csrf.token}"
-			}, function(data, status) {
-				if (data.length != 0) {
-					data.forEach(function(entry) {
-						if ($('#' + entry.from.trim()).length != 0) {
-							$("#" + name).chatbox("option", "hidden", false);
-							$('#' + entry.from.trim()).chatbox("option",
-									"boxManager").addMsg(entry.from,
-									entry.message);
-						} else {
-							addChatBox(entry.from.trim());
-							$('#' + entry.from.trim()).chatbox("option",
-									"boxManager").addMsg(entry.from,
-									entry.message);
-						}
-					});
-				}
-
-			});
-		}, 2000)
-	}
+	
 	function onlineCheck() {
-		setInterval(function() {
 			$("label").css('color', 'black');
 			$.post("getOnlineUsers", {
 				"${_csrf.parameterName}" : "${_csrf.token}"
@@ -115,7 +110,42 @@
 				})
 
 			});
-		}, 4000)
+	}
+</script>
+<script type="text/javascript">
+	var stompClient = null;
+	function connect() {
+		var socket = new SockJS('/jkchat/recieveMessage');
+		stompClient = Stomp.over(socket);
+		stompClient.connect({}, function(frame) {
+			console.log('Connected: ' + frame);
+			stompClient.subscribe('/queue/${me}', function(greeting) {
+				showGreeting(JSON.parse(greeting.body));
+			});
+			stompClient.subscribe('/queue/onlineUsers', function(userName) {
+				$('#label-' + userName.body).css('color', 'green');
+			})
+		});
+	}
+
+	function disconnect() {
+		if (stompClient != null) {
+			stompClient.disconnect();
+		}
+		console.log("Disconnected");
+	}
+
+	function sendMessage(from, message, to) {
+		stompClient.send("/recieveMessage", {}, JSON.stringify({
+			'from' : from,
+			"to" : to,
+			"message" : message
+		}));
+	}
+
+	function showGreeting(message) {
+		$('#' + message.from.trim()).chatbox("option", "boxManager").addMsg(
+				message.from, message.message);
 	}
 </script>
 <title>Chat</title>

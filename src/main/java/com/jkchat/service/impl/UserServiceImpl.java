@@ -88,14 +88,6 @@ public class UserServiceImpl implements UserService {
 	public List<ChatMessage> getMessages(String to, String from) {
 		List<ChatMessage> list = map.get(to);
 		map.remove(to);
-		UserMessages um = new UserMessages();
-		if (list!=null) {
-			for (ChatMessage cm : list) {
-				um.setCm(cm);
-				um.setuName(to);
-				userDao.saveMessages(um);
-			}
-		}
 		return list;
 	}
 
