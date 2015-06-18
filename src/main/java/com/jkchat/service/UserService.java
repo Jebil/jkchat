@@ -15,7 +15,7 @@ public interface UserService {
 
 	public List<String> getAllOtherNames(String name);
 
-	public List<String> getOnlineNames(String name);
+	public List<String> getOnlineNames();
 
 	public boolean putMessage(String to, ChatMessage cm);
 

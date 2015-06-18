@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,16 +56,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<String> getOnlineNames(String name) {
+	public List<String> getOnlineNames() {
 		List<Object> principals = sessionRegistry.getAllPrincipals();
 		List<String> usersOnlineList = new ArrayList<String>();
-		String myName = SecurityContextHolder.getContext().getAuthentication()
-				.getName();
 		for (Object principal : principals) {
-			if ((principal) != myName) {
 				usersOnlineList.add((String) principal);
-				System.out.println(principal);
-			}
 		}
 		return usersOnlineList;
 	}
@@ -93,7 +87,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<ChatMessage> getMessagesFromDB(String me, String from) {
-		return userDao.getMessages(me, from.toLowerCase());
+		List<ChatMessage> list=userDao.getMessages(me, from.toLowerCase());
+		return list;
 	}
 
 	@Override

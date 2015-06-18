@@ -22,9 +22,9 @@ public class SocketBasedChatController {
 	public void chatHandler(@Payload MessageDTO mdto) {
 		UserMessages um = new UserMessages();
 		ChatMessage cm = new ChatMessage();
-		cm.setFrom(mdto.getFrom());
-		cm.setMessage(mdto.getMessage());
-		um.setuName(mdto.getTo());
+		cm.setFrom(mdto.getFrom().trim());
+		cm.setMessage(mdto.getMessage().trim());
+		um.setuName(mdto.getTo().trim());
 		um.setCm(cm);
 		userService.saveMessagesToDB(um);
 		userService.putMessage(mdto.getTo().toLowerCase(), cm);

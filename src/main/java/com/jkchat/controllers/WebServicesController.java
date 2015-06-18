@@ -1,5 +1,6 @@
 package com.jkchat.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,7 @@ public class WebServicesController {
 
 	@RequestMapping(value = "getOnlineUsers", produces = "application/json")
 	public List<String> getOnlineUsers() {
-		String myName = SecurityContextHolder.getContext().getAuthentication()
-				.getName();
-		return userService.getOnlineNames(myName);
+		return userService.getOnlineNames();
 
 	}
 
@@ -49,7 +48,9 @@ public class WebServicesController {
 			@RequestParam(value = "from") String from) {
 		String myName = SecurityContextHolder.getContext().getAuthentication()
 				.getName();
-		return userService.getMessagesFromDB(myName.toLowerCase(), from.trim()
-				.toLowerCase());
+		List<ChatMessage> list = userService.getMessagesFromDB(
+				myName.toLowerCase().trim(), from.trim().toLowerCase());
+		Collections.reverse(list);
+		return list;
 	}
 }

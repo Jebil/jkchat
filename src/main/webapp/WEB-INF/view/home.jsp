@@ -21,6 +21,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script>
 	$(document).ready(function() {
+		var lastMan;
 		myOffset = 0;
 		connect();
 		initialize('${me}');
@@ -99,17 +100,17 @@
 
 		});
 	}
-	
-	function onlineCheck() {
-			$("label").css('color', 'black');
-			$.post("getOnlineUsers", {
-				"${_csrf.parameterName}" : "${_csrf.token}"
-			}, function(dat, status) {
-				dat.forEach(function(entry) {
-					$('#label-' + entry).css('color', 'green');
-				})
 
-			});
+	function onlineCheck() {
+		$("label").css('color', 'black');
+		$.post("getOnlineUsers", {
+			"${_csrf.parameterName}" : "${_csrf.token}"
+		}, function(dat, status) {
+			dat.forEach(function(entry) {
+				$('#label-' + entry).css('color', 'green');
+			})
+
+		});
 	}
 </script>
 <script type="text/javascript">
@@ -124,7 +125,20 @@
 			});
 			stompClient.subscribe('/queue/onlineUsers', function(userName) {
 				$('#label-' + userName.body).css('color', 'green');
-			})
+			});
+			stompClient.subscribe('/queue/loggedOutUser', function(userName) {
+				$('#label-' + userName.body).css('color', 'black');
+			});
+			stompClient.subscribe('/queue/users', function(users) {
+				$('#usersList').append(
+						"<label id='label-'" + users.body+">" + users.body
+								+ "</label>");
+				$('#label-' + users.body).click(function() {
+					addChatBox(users.body);
+				});
+				$('#label-' + users.body).css('color', 'black');
+			});
+
 		});
 	}
 
@@ -137,13 +151,19 @@
 
 	function sendMessage(from, message, to) {
 		stompClient.send("/recieveMessage", {}, JSON.stringify({
-			'from' : from,
+			"from" : from,
 			"to" : to,
 			"message" : message
 		}));
 	}
 
 	function showGreeting(message) {
+
+		if ($('#' + message.from.trim()).length != 0) {
+			$("#" + message.from.trim()).chatbox("option", "hidden", false);
+		} else {
+			addChatBox(message.from.trim());
+		}
 		$('#' + message.from.trim()).chatbox("option", "boxManager").addMsg(
 				message.from, message.message);
 	}
@@ -153,16 +173,19 @@
 <body>
 	<c:url var="logoutUrl" value="/logout" />
 	<form:form class="form-inline" action="${logoutUrl}" method="post">
-		<input type="submit" value="Log out" />
+		<input type="submit" value="Log out" onclick="javascript:disconnect()" />
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
 	</form:form>
 	<h1>Chat</h1>
-	<c:forEach items="${userList}" var="name">
-		<label id="label-${fn:toLowerCase(name) }"
-			onclick="javascript:addChatBox('${fn:toLowerCase(name)}')">${name}</label>
-		<br />
-	</c:forEach>
+	<h3>Welcome ${me}</h3>
+	<div id="usersList">
+		<c:forEach items="${userList}" var="name">
+			<label id="label-${fn:toLowerCase(name) }"
+				onclick="javascript:addChatBox('${fn:toLowerCase(name)}')">${name}</label>
+			<br />
+		</c:forEach>
+	</div>
 	<div id="root"></div>
 </body>
 </html>

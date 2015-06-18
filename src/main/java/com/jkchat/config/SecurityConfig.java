@@ -12,7 +12,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	AuthenticationProvider customAuthenticationProvider;
 	@Autowired
-	LogoutSuccessHandler lsh;
+	SimpleUrlLogoutSuccessHandler lsh;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().anyRequest().authenticated().and()
 				.sessionManagement().maximumSessions(1)
 				.sessionRegistry(sessionRegistry());
-		http.logout().logoutSuccessHandler(lsh);
+		http.logout().logoutSuccessHandler(lsh).logoutSuccessUrl( "/" );
 	}
 
 	@Bean

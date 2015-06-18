@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,9 @@ public class UserRegController {
 	@Qualifier("userValidator")
 	private Validator validator;
 
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		binder.setValidator(validator);
@@ -56,7 +60,6 @@ public class UserRegController {
 		model.addObject("userModel", new User());
 		logger.debug("end of register method");
 		return model;
-
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -67,10 +70,11 @@ public class UserRegController {
 			return "register";
 		}
 		if (userService.addUser(userModel)) {
+			this.simpMessagingTemplate.convertAndSend("/queue/users",
+					userModel.getName());
 			return "redirect:login";
 		} else {
 			return "redirect:register?error";
 		}
-
 	}
 }
