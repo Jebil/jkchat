@@ -1,3 +1,2 @@
 # jkchat
-A simple Web Socket based chat using Spring security and Hibernate
-Implemented using Spring websockets and sockjs
+A simple Web Socket based chat using Spring-web-socket, sock.js, stomp, jQuery  and Hibernate
