@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
 	public boolean addUser(User user) {
 		logger.debug("inside addUser ");
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		return userDao.addUser(user);
 	}
 
@@ -57,11 +59,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<String> getOnlineNames() {
+		logger.debug("inside getOnlineNames ");
 		List<Object> principals = sessionRegistry.getAllPrincipals();
 		List<String> usersOnlineList = new ArrayList<String>();
 		for (Object principal : principals) {
+			System.out.println("****** " + principal.toString());
+			if (principal.getClass() == User.class) {
+				usersOnlineList.add(((User) principal).getUsername());
+			} else {
 				usersOnlineList.add((String) principal);
+			}
 		}
+		logger.debug("End of getOnlineNames ");
 		return usersOnlineList;
 	}
 
@@ -87,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<ChatMessage> getMessagesFromDB(String me, String from) {
-		List<ChatMessage> list=userDao.getMessages(me, from.toLowerCase());
+		List<ChatMessage> list = userDao.getMessages(me, from.toLowerCase());
 		return list;
 	}
 

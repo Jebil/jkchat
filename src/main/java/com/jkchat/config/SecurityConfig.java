@@ -1,5 +1,7 @@
 package com.jkchat.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -21,11 +27,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	AuthenticationProvider customAuthenticationProvider;
 	@Autowired
 	SimpleUrlLogoutSuccessHandler lsh;
+	@Autowired
+	UserDetailsService service;
+	@Autowired
+	DataSource dataSource;
+	@Autowired
+	AuthenticationSuccessHandler authenticationSuccessHandler;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
 		auth.authenticationProvider(customAuthenticationProvider);
+	}
+
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
+		db.setDataSource(dataSource);
+		return db;
 	}
 
 	@Bean
@@ -40,8 +59,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/register").permitAll().and()
 				.authorizeRequests().anyRequest().authenticated().and()
 				.sessionManagement().maximumSessions(1)
-				.sessionRegistry(sessionRegistry());
-		http.logout().logoutSuccessHandler(lsh).logoutSuccessUrl( "/" );
+				.maxSessionsPreventsLogin(true)
+				.sessionRegistry(sessionRegistry()).and();
+		http.logout().logoutSuccessHandler(lsh).logoutSuccessUrl("/").and()
+				.csrf().and().rememberMe()
+				.tokenRepository(persistentTokenRepository())
+				.userDetailsService(service).tokenValiditySeconds(1209600);
+		http.rememberMe().authenticationSuccessHandler(
+				authenticationSuccessHandler);
+		http.formLogin().successHandler(authenticationSuccessHandler);
 	}
 
 	@Bean

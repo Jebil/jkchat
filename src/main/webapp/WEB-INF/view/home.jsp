@@ -5,6 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isELIgnored="false"%>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -179,6 +181,13 @@
 	</form:form>
 	<h1>Chat</h1>
 	<h3>Welcome ${me}</h3>
+	<sec:authorize access="isRememberMe()">
+		<h2># This user is login by "Remember Me Cookies".</h2>
+	</sec:authorize>
+
+	<sec:authorize access="isFullyAuthenticated()">
+		<h2># This user is login by username / password.</h2>
+	</sec:authorize>
 	<div id="usersList">
 		<c:forEach items="${userList}" var="name">
 			<label id="label-${fn:toLowerCase(name) }"

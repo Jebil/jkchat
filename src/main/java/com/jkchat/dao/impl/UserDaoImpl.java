@@ -10,6 +10,9 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +23,7 @@ import com.jkchat.models.UserMessages;
 
 @Repository
 @Transactional
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements UserDao, UserDetailsService {
 	private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 	@Autowired
 	SessionFactory sessionFactory;
@@ -86,6 +89,12 @@ public class UserDaoImpl implements UserDao {
 		session.persist(um);
 		logger.debug("end saveMessages ");
 		return true;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException {
+		return getuserDetails(username);
 	}
 
 }

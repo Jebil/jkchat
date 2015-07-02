@@ -51,7 +51,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	public BasicDataSource dataSource() {
 		BasicDataSource ds = new BasicDataSource();
 		ds.setDriverClassName("com.mysql.jdbc.Driver");
-		ds.setUrl("jdbc:mysql://localhost:3306");
+		ds.setUrl("jdbc:mysql://localhost:3306/test");
 		ds.setUsername("root");
 		return ds;
 	}
@@ -62,8 +62,11 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/css/**").addResourceLocations("classpath:/css/**");
-		registry.addResourceHandler("/img/**").addResourceLocations("classpath:/img/**");
-		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry.addResourceHandler("/css/**").addResourceLocations(
+				"classpath:/css/**");
+		registry.addResourceHandler("/img/**").addResourceLocations(
+				"classpath:/img/**");
+		registry.addResourceHandler("/resources/**").addResourceLocations(
+				"/resources/");
 	}
 }
