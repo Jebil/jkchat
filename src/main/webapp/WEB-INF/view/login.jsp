@@ -8,6 +8,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login Page</title>
+<script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <style>
@@ -67,7 +70,8 @@
 				<c:if test="${empty loginUpdate}">
 					<tr>
 						<td></td>
-						<td>Keep me logged in: <input type="checkbox" name="remember-me" /></td>
+						<td>Keep me logged in: <input type="checkbox"
+							name="remember-me" /></td>
 					</tr>
 				</c:if>
 				<tr>

@@ -1,9 +1,13 @@
 package com.jkchat.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 import com.jkchat.models.ChatMessage;
@@ -28,7 +32,14 @@ public class SocketBasedChatController {
 		um.setCm(cm);
 		userService.saveMessagesToDB(um);
 		userService.putMessage(mdto.getTo().toLowerCase(), cm);
-		this.simpMessagingTemplate.convertAndSend("/queue/" + mdto.getTo(),
-				mdto);
+		this.simpMessagingTemplate.convertAndSend(
+				"/messageQueue/" + mdto.getTo(), mdto);
 	}
+
+	// @SubscribeMapping("/queue/{dest}")
+	// public void testMapping(Principal accessor,@DestinationVariable String
+	// dest) {
+	// String user = accessor.getName();
+	// System.out.println("******** testMapping" + user+"****"+dest);
+	// }
 }

@@ -122,7 +122,7 @@
 		stompClient = Stomp.over(socket);
 		stompClient.connect({}, function(frame) {
 			console.log('Connected: ' + frame);
-			stompClient.subscribe('/queue/${me}', function(greeting) {
+			stompClient.subscribe('/messageQueue/${me}', function(greeting) {
 				showGreeting(JSON.parse(greeting.body));
 			});
 			stompClient.subscribe('/queue/onlineUsers', function(userName) {
