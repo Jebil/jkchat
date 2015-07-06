@@ -16,7 +16,6 @@ public class TopicSubscriptionInterceptor extends ChannelInterceptorAdapter {
 				&& headerAccessor.getUser() != null) {
 			Principal userPrincipal = headerAccessor.getUser();
 			String[] dest = headerAccessor.getDestination().split("/");
-			System.out.println(dest[1]);
 			if (dest[1].equals("messageQueue")) {
 				if (!(userPrincipal.getName().equals(dest[2]))) {
 					throw new IllegalArgumentException(
@@ -26,5 +25,4 @@ public class TopicSubscriptionInterceptor extends ChannelInterceptorAdapter {
 		}
 		return message;
 	}
-
 }

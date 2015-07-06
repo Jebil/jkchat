@@ -36,10 +36,9 @@ public class SocketBasedChatController {
 				"/messageQueue/" + mdto.getTo(), mdto);
 	}
 
-	// @SubscribeMapping("/queue/{dest}")
-	// public void testMapping(Principal accessor,@DestinationVariable String
-	// dest) {
-	// String user = accessor.getName();
-	// System.out.println("******** testMapping" + user+"****"+dest);
-	// }
+	@SubscribeMapping("/queue/{dest}")
+	public void testMapping(Principal accessor, @DestinationVariable String dest) {
+		//String user = accessor.getName();
+		//System.out.println("******** testMapping" + user + "****" + dest);
+	}
 }
