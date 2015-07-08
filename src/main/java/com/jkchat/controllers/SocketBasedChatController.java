@@ -38,7 +38,7 @@ public class SocketBasedChatController {
 
 	@SubscribeMapping("/queue/{dest}")
 	public void testMapping(Principal accessor, @DestinationVariable String dest) {
-		//String user = accessor.getName();
-		//System.out.println("******** testMapping" + user + "****" + dest);
+		// String user = accessor.getName();
+		// System.out.println("******** testMapping" + user + "****" + dest);
 	}
 }

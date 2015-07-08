@@ -172,7 +172,7 @@
 </script>
 <title>Chat</title>
 </head>
-<body>
+<body onunload="forceLogout()">
 	<c:url var="logoutUrl" value="/logout" />
 	<form:form class="form-inline" action="${logoutUrl}" method="post">
 		<input type="submit" value="Log out" onclick="javascript:disconnect()" />

@@ -63,7 +63,6 @@ public class UserServiceImpl implements UserService {
 		List<Object> principals = sessionRegistry.getAllPrincipals();
 		List<String> usersOnlineList = new ArrayList<String>();
 		for (Object principal : principals) {
-			System.out.println("****** " + principal.toString());
 			if (principal.getClass() == User.class) {
 				usersOnlineList.add(((User) principal).getUsername());
 			} else {
