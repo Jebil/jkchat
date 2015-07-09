@@ -20,6 +20,10 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -34,12 +38,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	AuthenticationSuccessHandler authenticationSuccessHandler;
 
+	/**
+	 * @param auth
+	 * @throws Exception
+	 */
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
 		auth.authenticationProvider(customAuthenticationProvider);
 	}
 
+	/**
+	 * @return
+	 */
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
@@ -47,31 +58,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return db;
 	}
 
+	/**
+	 * @return
+	 */
 	@Bean
 	public SessionRegistry sessionRegistry() {
 		return new SessionRegistryImpl();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.config.annotation.web.configuration.
+	 * WebSecurityConfigurerAdapter#configure(org.springframework.security.
+	 * config.annotation.web.builders.HttpSecurity)
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin().loginPage("/login")
-				.loginProcessingUrl("/perfom_login").permitAll().and()
-				.authorizeRequests().antMatchers("/register").permitAll().and()
-				.authorizeRequests().anyRequest().authenticated().and()
-				.sessionManagement().maximumSessions(1)
+		http.formLogin().loginPage("/login").loginProcessingUrl("/perfom_login")
+				.permitAll().and().authorizeRequests().antMatchers("/register")
+				.permitAll().and().authorizeRequests().anyRequest()
+				.authenticated().and().sessionManagement().maximumSessions(1)
 				.maxSessionsPreventsLogin(true)
 				.sessionRegistry(sessionRegistry()).and();
 		http.logout().logoutSuccessHandler(lsh).logoutSuccessUrl("/").and()
 				.csrf().and().rememberMe()
 				.tokenRepository(persistentTokenRepository())
 				.userDetailsService(service).tokenValiditySeconds(1209600);
-		http.rememberMe().authenticationSuccessHandler(
-				authenticationSuccessHandler);
+		http.rememberMe()
+				.authenticationSuccessHandler(authenticationSuccessHandler);
 		http.formLogin().successHandler(authenticationSuccessHandler);
 	}
 
+	/**
+	 * @return
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
+
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder;
 	}

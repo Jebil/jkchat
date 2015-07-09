@@ -26,6 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jkchat.models.User;
 import com.jkchat.service.UserService;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Controller
 public class UserRegController {
 	@Autowired
@@ -38,6 +42,9 @@ public class UserRegController {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
+	/**
+	 * @param binder
+	 */
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		binder.setValidator(validator);
@@ -46,6 +53,11 @@ public class UserRegController {
 	private static final Logger logger = Logger
 			.getLogger(UserRegController.class);
 
+	/**
+	 * @param res
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView getRegisterView(HttpServletResponse res)
 			throws IOException {
@@ -62,6 +74,13 @@ public class UserRegController {
 		return model;
 	}
 
+	/**
+	 * @param userModel
+	 * @param result
+	 * @param req
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(@ModelAttribute("userModel") User userModel,
 			BindingResult result, HttpServletRequest req, Model model) {

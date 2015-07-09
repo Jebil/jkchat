@@ -8,7 +8,19 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 public class TopicSubscriptionInterceptor extends ChannelInterceptorAdapter {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.messaging.support.ChannelInterceptorAdapter#preSend(
+	 * org.springframework.messaging.Message,
+	 * org.springframework.messaging.MessageChannel)
+	 */
 	@Override
 	public Message<?> preSend(Message<?> message, MessageChannel channel) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);

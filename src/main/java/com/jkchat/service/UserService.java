@@ -6,6 +6,10 @@ import com.jkchat.models.ChatMessage;
 import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 public interface UserService {
 	public User getUserDetails(String userName);
 

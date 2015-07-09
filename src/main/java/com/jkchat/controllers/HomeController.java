@@ -20,6 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.jkchat.service.UserService;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Controller
 public class HomeController {
 	private static final Logger LOGGER = Logger.getLogger(HomeController.class);
@@ -33,6 +37,12 @@ public class HomeController {
 	@Autowired
 	PersistentTokenRepository pTr;
 
+	/**
+	 * @param res
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = { "/", "/home" }, method = RequestMethod.GET)
 	public ModelAndView loginPage(HttpServletResponse res,
 			HttpServletRequest req) throws IOException {
@@ -55,6 +65,9 @@ public class HomeController {
 		return model;
 	}
 
+	/**
+	 * @param req
+	 */
 	@RequestMapping(value = "/forceSessionClose", method = RequestMethod.POST)
 	public void forceLogout(HttpServletRequest req) {
 		req.getSession().invalidate();

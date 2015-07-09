@@ -21,6 +21,10 @@ import com.jkchat.models.ChatMessage;
 import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Repository
 @Transactional
 public class UserDaoImpl implements UserDao, UserDetailsService {
@@ -28,6 +32,11 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 	@Autowired
 	SessionFactory sessionFactory;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.dao.UserDao#getuserDetails(java.lang.String)
+	 */
 	public User getuserDetails(String username) {
 		logger.debug("inside getUser ");
 		Session session = sessionFactory.getCurrentSession();
@@ -38,6 +47,11 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return foundUser;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.dao.UserDao#addUser(com.jkchat.models.User)
+	 */
 	public boolean addUser(User user) {
 		logger.debug("inside addUser ");
 		Session session = sessionFactory.getCurrentSession();
@@ -46,6 +60,11 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.dao.UserDao#getAllUserNames()
+	 */
 	@Override
 	public List<String> getAllUserNames() {
 		Session session = sessionFactory.getCurrentSession();
@@ -54,6 +73,11 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return cr.list();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.dao.UserDao#getAllOtherNames(java.lang.String)
+	 */
 	@Override
 	public List<String> getAllOtherNames(String name) {
 		Session session = sessionFactory.getCurrentSession();
@@ -63,6 +87,12 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return cr.list();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.dao.UserDao#getMessages(java.lang.String,
+	 * java.lang.String)
+	 */
 	@Override
 	public List<ChatMessage> getMessages(String me, String from) {
 		Session session = sessionFactory.getCurrentSession();
@@ -82,6 +112,11 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return cr.list();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.dao.UserDao#saveMessages(com.jkchat.models.UserMessages)
+	 */
 	@Override
 	public boolean saveMessages(UserMessages um) {
 		logger.debug("inside saveMessages ");
@@ -91,6 +126,12 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.core.userdetails.UserDetailsService#
+	 * loadUserByUsername(java.lang.String)
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {

@@ -12,19 +12,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.jkchat.service.UserService;
-
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Component
 public class LogoutHandlerClass extends SimpleUrlLogoutSuccessHandler {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
-	@Autowired
-	private UserService userService;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.web.authentication.logout.
+	 * SimpleUrlLogoutSuccessHandler#onLogoutSuccess(javax.servlet.http.
+	 * HttpServletRequest, javax.servlet.http.HttpServletResponse,
+	 * org.springframework.security.core.Authentication)
+	 */
 	@Override
 	public void onLogoutSuccess(HttpServletRequest arg0,
-			HttpServletResponse arg1, Authentication arg2) throws IOException,
-			ServletException {
+			HttpServletResponse arg1, Authentication arg2)
+					throws IOException, ServletException {
 		this.simpMessagingTemplate.convertAndSend("/queue/loggedOutUser",
 				arg2.getName());
 		super.onLogoutSuccess(arg0, arg1, arg2);

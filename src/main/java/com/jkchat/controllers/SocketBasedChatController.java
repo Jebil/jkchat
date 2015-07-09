@@ -15,6 +15,10 @@ import com.jkchat.models.MessageDTO;
 import com.jkchat.models.UserMessages;
 import com.jkchat.service.UserService;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Controller
 public class SocketBasedChatController {
 	@Autowired
@@ -22,6 +26,9 @@ public class SocketBasedChatController {
 	@Autowired
 	UserService userService;
 
+	/**
+	 * @param mdto
+	 */
 	@MessageMapping("/recieveMessage")
 	public void chatHandler(@Payload MessageDTO mdto) {
 		UserMessages um = new UserMessages();
@@ -32,12 +39,17 @@ public class SocketBasedChatController {
 		um.setCm(cm);
 		userService.saveMessagesToDB(um);
 		userService.putMessage(mdto.getTo().toLowerCase(), cm);
-		this.simpMessagingTemplate.convertAndSend(
-				"/messageQueue/" + mdto.getTo(), mdto);
+		this.simpMessagingTemplate
+				.convertAndSend("/messageQueue/" + mdto.getTo(), mdto);
 	}
 
+	/**
+	 * @param accessor
+	 * @param dest
+	 */
 	@SubscribeMapping("/queue/{dest}")
-	public void testMapping(Principal accessor, @DestinationVariable String dest) {
+	public void testMapping(Principal accessor,
+			@DestinationVariable String dest) {
 		// String user = accessor.getName();
 		// System.out.println("******** testMapping" + user + "****" + dest);
 	}

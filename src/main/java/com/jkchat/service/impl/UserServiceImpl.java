@@ -19,6 +19,10 @@ import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 import com.jkchat.service.UserService;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -34,29 +38,54 @@ public class UserServiceImpl implements UserService {
 	private static final Logger logger = Logger
 			.getLogger(UserServiceImpl.class);
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#getUserDetails(java.lang.String)
+	 */
 	public User getUserDetails(String userName) {
 		logger.debug("inside getUser ");
 		return userDao.getuserDetails(userName);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#addUser(com.jkchat.models.User)
+	 */
 	public boolean addUser(User user) {
 		logger.debug("inside addUser ");
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		return userDao.addUser(user);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#getAllUserNames()
+	 */
 	@Override
 	public List<String> getAllUserNames() {
 		logger.debug("inside getAllUserNames ");
 		return userDao.getAllUserNames();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#getAllOtherNames(java.lang.String)
+	 */
 	@Override
 	public List<String> getAllOtherNames(String name) {
 		logger.debug("inside getAllOtherNames ");
 		return userDao.getAllOtherNames(name);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#getOnlineNames()
+	 */
 	@Override
 	public List<String> getOnlineNames() {
 		logger.debug("inside getOnlineNames ");
@@ -73,6 +102,12 @@ public class UserServiceImpl implements UserService {
 		return usersOnlineList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#putMessage(java.lang.String,
+	 * com.jkchat.models.ChatMessage)
+	 */
 	@Override
 	public boolean putMessage(String to, ChatMessage cm) {
 		List<ChatMessage> list = map.get(to);
@@ -86,6 +121,12 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#getMessages(java.lang.String,
+	 * java.lang.String)
+	 */
 	@Override
 	public List<ChatMessage> getMessages(String to, String from) {
 		List<ChatMessage> list = map.get(to);
@@ -93,12 +134,24 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#getMessagesFromDB(java.lang.String,
+	 * java.lang.String)
+	 */
 	@Override
 	public List<ChatMessage> getMessagesFromDB(String me, String from) {
 		List<ChatMessage> list = userDao.getMessages(me, from.toLowerCase());
 		return list;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jkchat.service.UserService#saveMessagesToDB(com.jkchat.models.
+	 * UserMessages)
+	 */
 	@Override
 	public boolean saveMessagesToDB(UserMessages um) {
 		userDao.saveMessages(um);

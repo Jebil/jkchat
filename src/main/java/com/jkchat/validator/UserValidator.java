@@ -10,6 +10,10 @@ import org.springframework.validation.Validator;
 import com.jkchat.models.User;
 import com.jkchat.service.UserService;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Component(value = "userValidator")
 public class UserValidator implements Validator {
 	@Autowired
@@ -20,6 +24,12 @@ public class UserValidator implements Validator {
 		return User.class.equals(clazz);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.validation.Validator#validate(java.lang.Object,
+	 * org.springframework.validation.Errors)
+	 */
 	public void validate(Object arg0, Errors arg1) {
 		logger.debug("Inside validator method");
 		ValidationUtils.rejectIfEmpty(arg1, "name", "name.empty");

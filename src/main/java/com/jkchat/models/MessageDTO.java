@@ -1,5 +1,9 @@
 package com.jkchat.models;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 public class MessageDTO {
 	private String from, to, message;
 

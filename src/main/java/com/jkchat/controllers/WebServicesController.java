@@ -12,17 +12,30 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jkchat.models.ChatMessage;
 import com.jkchat.service.UserService;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @RestController
 public class WebServicesController {
 	@Autowired
 	UserService userService;
 
+	/**
+	 * @return
+	 */
 	@RequestMapping(value = "getOnlineUsers", produces = "application/json")
 	public List<String> getOnlineUsers() {
 		return userService.getOnlineNames();
 
 	}
 
+	/**
+	 * @param to
+	 * @param from
+	 * @param msg
+	 * @return
+	 */
 	@RequestMapping(value = "sendMessage", produces = "application/json")
 	public String sendMessage(@RequestParam(value = "to") String to,
 			@RequestParam(value = "from") String from,
@@ -34,6 +47,9 @@ public class WebServicesController {
 		return "success";
 	}
 
+	/**
+	 * @return
+	 */
 	@RequestMapping(value = "getMessages", produces = "application/json")
 	public List<ChatMessage> getMessages() {
 		String myName = SecurityContextHolder.getContext().getAuthentication()
@@ -43,6 +59,10 @@ public class WebServicesController {
 		return list;
 	}
 
+	/**
+	 * @param from
+	 * @return
+	 */
 	@RequestMapping(value = "loadPreviousMessages", produces = "application/json")
 	public List<ChatMessage> loadPreviousMessages(
 			@RequestParam(value = "from") String from) {

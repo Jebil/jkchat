@@ -13,12 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Controller
 public class LoginController {
-	
+
 	private static final Logger logger = Logger
 			.getLogger(LoginController.class);
 
+	/**
+	 * @param res
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginPage(HttpServletResponse res) throws IOException {
 		logger.debug("inside login method");

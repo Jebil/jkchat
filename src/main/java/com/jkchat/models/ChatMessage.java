@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author Jebil Kuruvila
+ *
+ */
 @Entity
 @Table(name = "ChatMessage", schema = "test")
 public class ChatMessage {
