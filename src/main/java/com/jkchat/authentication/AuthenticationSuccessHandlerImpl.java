@@ -34,7 +34,6 @@ public class AuthenticationSuccessHandlerImpl
 	public void onAuthenticationSuccess(HttpServletRequest request,
 			HttpServletResponse response, Authentication authentication)
 					throws IOException, ServletException {
-
 		this.simpMessagingTemplate.convertAndSend("/queue/onlineUsers",
 				authentication.getName());
 		response.sendRedirect("home");

@@ -88,6 +88,7 @@ public class WebServicesController {
 				.getName();
 		ServerLocation loc = serverLocationService.getLocation(ipAddress);
 		if (!(SessionManager.getLastIp(request).equals(ipAddress))) {
+			SessionManager.setLastIp(request, ipAddress);
 			userService.setLastLocationByName(myName, loc);
 		}
 		return loc;
