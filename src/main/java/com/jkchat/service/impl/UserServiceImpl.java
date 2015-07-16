@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jkchat.dao.UserDao;
 import com.jkchat.models.ChatMessage;
+import com.jkchat.models.ServerLocation;
 import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 import com.jkchat.service.UserService;
@@ -156,5 +157,17 @@ public class UserServiceImpl implements UserService {
 	public boolean saveMessagesToDB(UserMessages um) {
 		userDao.saveMessages(um);
 		return true;
+	}
+
+	@Override
+	public ServerLocation getLastLocationByName(String userName) {
+		return userDao.getLastLocationByName(userName);
+	}
+
+	@Override
+	public ServerLocation setLastLocationByName(String userName,
+			ServerLocation loc) {
+		userDao.setLastLocationByName(userName, loc);
+		return null;
 	}
 }

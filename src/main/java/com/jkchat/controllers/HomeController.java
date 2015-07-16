@@ -47,7 +47,6 @@ public class HomeController {
 	public ModelAndView loginPage(HttpServletResponse res,
 			HttpServletRequest req) throws IOException {
 		LOGGER.debug("inside Home method");
-
 		ModelAndView model = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();

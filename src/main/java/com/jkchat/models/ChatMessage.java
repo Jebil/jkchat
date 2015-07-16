@@ -6,12 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 /**
  * @author Jebil Kuruvila
  *
  */
 @Entity
 @Table(name = "ChatMessage", schema = "test")
+@DynamicUpdate
 public class ChatMessage {
 	@Id
 	@GeneratedValue

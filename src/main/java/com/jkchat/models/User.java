@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Entity
 @Table(name = "users", schema = "test")
+@DynamicUpdate
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -29,6 +35,9 @@ public class User implements UserDetails {
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	private String password;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "lastLocation")
+	private ServerLocation lastLocation;
 
 	public User(int id, String name, String password) {
 		this.id = id;
@@ -37,6 +46,14 @@ public class User implements UserDetails {
 	}
 
 	public User() {
+	}
+
+	public ServerLocation getLastLocation() {
+		return lastLocation;
+	}
+
+	public void setLastLocation(ServerLocation lastLocation) {
+		this.lastLocation = lastLocation;
 	}
 
 	public int getId() {

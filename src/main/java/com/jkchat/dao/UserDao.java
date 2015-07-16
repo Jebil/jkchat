@@ -3,6 +3,7 @@ package com.jkchat.dao;
 import java.util.List;
 
 import com.jkchat.models.ChatMessage;
+import com.jkchat.models.ServerLocation;
 import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 
@@ -22,4 +23,8 @@ public interface UserDao {
 	public List<ChatMessage> getMessages(String me, String from);
 
 	public boolean saveMessages(UserMessages um);
+
+	public ServerLocation getLastLocationByName(String userName);
+
+	public void setLastLocationByName(String userName,ServerLocation loc);
 }

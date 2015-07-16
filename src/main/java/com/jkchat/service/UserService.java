@@ -3,6 +3,7 @@ package com.jkchat.service;
 import java.util.List;
 
 import com.jkchat.models.ChatMessage;
+import com.jkchat.models.ServerLocation;
 import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 
@@ -28,5 +29,9 @@ public interface UserService {
 	public List<ChatMessage> getMessagesFromDB(String me, String From);
 
 	public boolean saveMessagesToDB(UserMessages um);
+
+	public ServerLocation getLastLocationByName(String userName);
+
+	public ServerLocation setLastLocationByName(String userName,ServerLocation loc);
 
 }

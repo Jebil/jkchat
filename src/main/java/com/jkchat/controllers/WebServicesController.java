@@ -3,6 +3,8 @@ package com.jkchat.controllers;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jkchat.models.ChatMessage;
+import com.jkchat.models.ServerLocation;
+import com.jkchat.service.ServerLocationService;
 import com.jkchat.service.UserService;
+import com.jkchat.session.SessionManager;
 
 /**
  * @author Jebil Kuruvila
@@ -20,6 +25,8 @@ import com.jkchat.service.UserService;
 public class WebServicesController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	ServerLocationService serverLocationService;
 
 	/**
 	 * @return
@@ -72,5 +79,17 @@ public class WebServicesController {
 				myName.toLowerCase().trim(), from.trim().toLowerCase());
 		Collections.reverse(list);
 		return list;
+	}
+
+	@RequestMapping(value = "getLocationByIP", produces = "application/json")
+	public ServerLocation getLocationByIP(@RequestParam String ipAddress,
+			HttpServletRequest request) {
+		String myName = SecurityContextHolder.getContext().getAuthentication()
+				.getName();
+		ServerLocation loc = serverLocationService.getLocation(ipAddress);
+		if (!(SessionManager.getLastIp(request).equals(ipAddress))) {
+			userService.setLastLocationByName(myName, loc);
+		}
+		return loc;
 	}
 }

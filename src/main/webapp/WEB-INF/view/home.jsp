@@ -5,6 +5,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isELIgnored="false"%>
+<%@ page import="java.net.URL"%>
+<%@ page import="java.io.BufferedReader"%>
+<%@ page import="java.io.InputStreamReader"%>
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -20,6 +23,7 @@
 <script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
 <script type="text/javascript" src="resources/js/jquery.ui.chatbox.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script>
 	$(document).ready(function() {
@@ -169,6 +173,67 @@
 		$('#' + message.from.trim()).chatbox("option", "boxManager").addMsg(
 				message.from, message.message);
 	}
+	flag = false;
+	$(window).focus(function() {
+		if (flag) {
+			alert();
+			flag = false;
+		}
+	});
+	$(window).blur(function() {
+		setTimeout(function() {
+			flag = true;
+		}, 6000);
+	});
+</script>
+
+<script>
+	function getLocationByIp(ip) {
+		console.log("IP:" + ip);
+		$.getJSON("${pageContext.request.contextPath}/getLocationByIP", {
+			ipAddress : ip
+		}, function(data) {
+			var data = JSON.stringify(data);
+			var json = JSON.parse(data);
+			showMap(json["lat"], json["lon"])
+		}).done(function() {
+		}).fail(function() {
+		}).complete(function() {
+		});
+	}
+	var map;
+
+	function showMap(latitude, longitude) {
+
+		var googleLatandLong = new google.maps.LatLng(latitude, longitude);
+
+		var mapOptions = {
+			zoom : 5,
+			center : googleLatandLong,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		};
+
+		var mapDiv = document.getElementById("map");
+		map = new google.maps.Map(mapDiv, mapOptions);
+
+		var title = "Server Location";
+		addMarker(map, googleLatandLong, title, "");
+
+	}
+	function addMarker(map, latlong, title, content) {
+
+		var markerOptions = {
+			position : latlong,
+			map : map,
+			title : title,
+			clickable : true
+		};
+		var marker = new google.maps.Marker(markerOptions);
+		google.maps.event.addListener(marker, 'click', function() {
+			map.setZoom(10);
+			map.setCenter(marker.getPosition());
+		});
+	}
 </script>
 <title>Chat</title>
 </head>
@@ -180,6 +245,18 @@
 			value="${_csrf.token}" />
 	</form:form>
 	<h1>Chat</h1>
+	<%
+		URL whatismyip = new URL("http://checkip.amazonaws.com");
+		BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+		String ip = in.readLine();
+		request.setAttribute("clientIP", ip);
+	%>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			getLocationByIp('${clientIP}');
+		});
+	</script>
+
 	<h3>Welcome ${me}</h3>
 	<sec:authorize access="isRememberMe()">
 		<h2># This user is login by "Remember Me Cookies".</h2>
@@ -195,6 +272,7 @@
 			<br />
 		</c:forEach>
 	</div>
+	<div style="width: 600px; height: 400px" id="map"></div>
 	<div id="root"></div>
 </body>
 </html>

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jkchat.dao.UserDao;
 import com.jkchat.models.ChatMessage;
+import com.jkchat.models.ServerLocation;
 import com.jkchat.models.User;
 import com.jkchat.models.UserMessages;
 
@@ -138,4 +139,21 @@ public class UserDaoImpl implements UserDao, UserDetailsService {
 		return getuserDetails(username);
 	}
 
+	@Override
+	public ServerLocation getLastLocationByName(String userName) {
+		logger.debug("inside getLastLocationByName");
+		Session session = sessionFactory.getCurrentSession();
+		Criteria cr = session.createCriteria(User.class);
+		cr.add(Restrictions.eq("name", userName));
+		cr.setProjection(Projections.property("lastLocation"));
+		return (ServerLocation) cr.uniqueResult();
+	}
+
+	@Override
+	public void setLastLocationByName(String userName, ServerLocation loc) {
+		User user = getuserDetails(userName);
+		user.setLastLocation(loc);
+		Session session = sessionFactory.getCurrentSession();
+		session.update(user);
+	}
 }

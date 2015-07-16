@@ -10,12 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 /**
  * @author Jebil Kuruvila
  *
  */
 @Entity
 @Table(name = "usermessages", schema = "test")
+@DynamicUpdate
 public class UserMessages {
 	@Id
 	@GeneratedValue
