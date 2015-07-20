@@ -87,7 +87,8 @@ public class WebServicesController {
 		String myName = SecurityContextHolder.getContext().getAuthentication()
 				.getName();
 		ServerLocation loc = serverLocationService.getLocation(ipAddress);
-		if (!(SessionManager.getLastIp(request).equals(ipAddress))) {
+		if (SessionManager.getLastIp(request) == null
+				|| !(SessionManager.getLastIp(request).equals(ipAddress))) {
 			SessionManager.setLastIp(request, ipAddress);
 			userService.setLastLocationByName(myName, loc);
 		}
