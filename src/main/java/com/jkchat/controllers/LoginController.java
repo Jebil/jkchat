@@ -40,6 +40,5 @@ public class LoginController {
 		model.setViewName("login");
 		logger.debug("end of login method");
 		return model;
-
 	}
 }

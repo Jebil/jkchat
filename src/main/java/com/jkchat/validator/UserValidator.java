@@ -32,8 +32,9 @@ public class UserValidator implements Validator {
 	 */
 	public void validate(Object arg0, Errors arg1) {
 		logger.debug("Inside validator method");
-		ValidationUtils.rejectIfEmpty(arg1, "name", "name.empty");
-		ValidationUtils.rejectIfEmpty(arg1, "password", "password.empty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(arg1, "name", "name.empty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(arg1, "password",
+				"password.empty");
 		User u = (User) arg0;
 		if (null != userService.getUserDetails(u.getName())) {
 			arg1.rejectValue("name", "already.exists");
