@@ -19,12 +19,14 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
+
+<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
 <dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-dbcp2</artifactId>
-    <version>2.1.1</version>
+    <groupId>commons-dbcp</groupId>
+    <artifactId>commons-dbcp</artifactId>
+    <version>1.2.2</version>
 </dependency>
+
 
 		<dependency>
 			<groupId>org.springframework</groupId>
