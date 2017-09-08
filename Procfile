@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -jar --port $PORT target/*.jar
+web: java -jar target/jkchat.jar
