@@ -20,7 +20,6 @@ import org.springframework.web.servlet.view.JstlView;
  * @author Jebil Kuruvila
  *
  */
-@EnableWebMvc
 @Configuration
 @ComponentScan({ "com.jkchat" })
 @Import({ SecurityConfig.class })
