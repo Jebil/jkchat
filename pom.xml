@@ -13,6 +13,11 @@
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
         <jstl.version>1.2</jstl.version>
     </properties>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.6.RELEASE</version>
+    </parent>
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -149,7 +154,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
             <version>1.2.4.RELEASE</version>
             <scope>provided</scope>
         </dependency>
@@ -163,14 +168,6 @@
         <finalName>jkchat</finalName>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.5.1</version>
-                    <configuration>
-                        <source>${jdk.version}</source>
-                        <target>${jdk.version}</target>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>

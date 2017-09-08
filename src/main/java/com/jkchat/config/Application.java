@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.mobile.DeviceDelegatingViewResolve
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * Created by Jebil.kuruvila on 08-09-2017.
