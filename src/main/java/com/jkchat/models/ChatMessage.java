@@ -1,43 +1,38 @@
 package com.jkchat.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
 
 /**
  * @author Jebil Kuruvila
- *
  */
 @Entity
 @Table(name = "ChatMessage", schema = "test")
 @DynamicUpdate
 public class ChatMessage {
-	@Id
-	@GeneratedValue
-	private int id;
-	@Column
-	private String fromUser;
-	@Column
-	private String message;
+    @Id
+    @GeneratedValue
+    private int id;
+    @Column
+    private String fromUser;
+    @Column
+    private String message;
 
-	public String getFrom() {
-		return fromUser;
-	}
+    public String getFrom() {
+        return fromUser;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public void setFrom(String from) {
+        this.fromUser = from;
+    }
 
-	public void setFrom(String from) {
-		this.fromUser = from;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
 }
